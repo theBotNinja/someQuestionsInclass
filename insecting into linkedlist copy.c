@@ -51,8 +51,13 @@ struct node * insectIntoLinkedList(struct node * Start, int index ,int value){
 int main(){
     struct node * linkedlistStart = createLinkedList(10);
 
-    linkedlistStart = insectIntoLinkedList(linkedlistStart, 11 ,100);
-    
+    int n,value;
+    printf("Enter at which index(b/w 0 to 10) : ");
+    scanf("%d",&n);
+    printf("Enter at what values at %d index : ",n);
+    scanf("%d",&value);
+
+    linkedlistStart = insectIntoLinkedList(linkedlistStart, n , value);
 
     struct node * s = linkedlistStart;
     printf("start -> ");

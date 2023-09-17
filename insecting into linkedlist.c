@@ -24,15 +24,14 @@ struct node * createLinkedList(int n){
     return start;
 }
 
-int insectIntoLinkedList(struct node * Start, int index ,int value){
+int insectIntoLinkedList(struct node ** Start, int index ,int value){
     struct node *new = (struct node *)malloc(sizeof(struct node));
     if (index == 1){
         new->n = value;
-        new->next = Start;
-        Start = new;
-        printf("%u<>%u\n",Start,new);
+        new->next = *Start;
+        *Start = new;
     }else{
-        struct node * s =  Start;
+        struct node * s =  *Start;
         while (index-1){
             s = s->next;
             if (s == NULL){
@@ -51,16 +50,14 @@ int insectIntoLinkedList(struct node * Start, int index ,int value){
 int main(){
     struct node * linkedlistStart = createLinkedList(10);
 
-    int result = insectIntoLinkedList(linkedlistStart, 1 ,100);
+    int result = insectIntoLinkedList(&linkedlistStart, 1 ,100);
     if (result){
         printf("can't perform operation with these parameters.\n");
     }
-    printf("%u\n",linkedlistStart);
 
     struct node * s = linkedlistStart;
     printf("start -> ");
     while (s){
-        printf("[%d] ",s->n);
         s = s->next;
     }
     printf("-> end\n");
