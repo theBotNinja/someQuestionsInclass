@@ -50,7 +50,7 @@ int insectIntoLinkedList(struct node ** Start, int index ,int value){
 int main(){
     struct node * linkedlistStart = createLinkedList(10);
 
-    int result = insectIntoLinkedList(&linkedlistStart, 1 ,100);
+    int result = insectIntoLinkedList(&linkedlistStart, 10 ,100);
     if (result){
         printf("can't perform operation with these parameters.\n");
     }
@@ -58,6 +58,7 @@ int main(){
     struct node * s = linkedlistStart;
     printf("start -> ");
     while (s){
+        printf("[%d] ",s->n);
         s = s->next;
     }
     printf("-> end\n");

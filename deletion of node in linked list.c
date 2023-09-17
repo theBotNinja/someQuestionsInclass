@@ -63,26 +63,21 @@ int deleteByAddr(struct node ** ptr_start , struct node * addr){
 
 int deleteByValue(struct node ** ptr_start , int value){
     struct node * s = *ptr_start;
-    struct node * addr;
+    struct node * prev = NULL;
     while (s != NULL)
     {   
-        if (s==*ptr_start){
-            if (s->n == value){
+        if (s->n == value){
+            if (prev){
+                prev->next = s->next;
+                free(s);
+                return 1;
+            }else{
                 *ptr_start = s->next;
                 free(s);
                 return 1;
-            }else if (s->next->n == value && s->next != NULL){
-                addr = s->next; 
-                s->next = s->next->next;
-                free(addr);
-                return 1;
             }
-        }else if (s->next->n == value && s->next != NULL)
-        {
-            addr = s->next; 
-            s->next = s->next->next;
-            free(addr);
-            return 1;
+        }else{
+            prev = s;
         }
         s = s->next;
     }
@@ -118,7 +113,7 @@ int main(){
     struct node * LinkedListStart = createLinkedList(10,&addr);
 
     //int result = deleteByAddr(&LinkedListStart,temp);
-    int result = deleteByValue(&LinkedListStart,100);
+    int result = deleteByValue(&LinkedListStart,11);
     //int x;
     //scanf("%d",&x);
     //int result = deleteByIndex(&LinkedListStart,x);
