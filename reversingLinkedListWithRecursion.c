@@ -7,13 +7,16 @@ struct node
     int n;
     struct node *next;
 };
+struct node *START = NULL;
 
 void showLinkedList(struct node * start){
     struct node * s = start;
+    int count = 0;
     printf("start -> ");
-    while (s){
+    while (s && count < 10){
         printf("[%d] ",s->n);
         s = s->next;
+    count ++;
     }
     printf("-> end\n");
 }
@@ -34,20 +37,22 @@ struct node * createLinkedList(int n){
     return start;
 }
 
-struct node * reverseLinkedList(struct node *start){
-    
-    if (start->next == NULL){
-        return start;
-    }else{
-        struct node *str = reverseLinkedList(start->next);
-
+struct node * reverseLinkedList(struct node *start,struct node *first){
+    struct node *temp = start;
+    if (temp->next == NULL){
+        START  = temp;
+        return temp;
     }
+    struct node *s = reverseLinkedList(temp->next,first);
+    s->next = temp;
+    temp->next = NULL;
 }
 
 int main(){
-    struct node *linkedlist = createLinkedList(11);
-    showLinkedList(linkedlist);
-    struct node *rll = reverseLinkedList(linkedlist);
-    showLinkedList(rll);
+    struct node *linkedlist = createLinkedList(5);
+    START = linkedlist;
+    showLinkedList(START);
+    struct node *rll = reverseLinkedList(linkedlist,START);
+    showLinkedList(START);
     return 0;
 }
