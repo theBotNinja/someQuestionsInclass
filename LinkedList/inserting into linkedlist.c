@@ -24,14 +24,18 @@ struct node * createLinkedList(int n){
     return start;
 }
 
-int insectIntoLinkedList(struct node ** Start, int index ,int value){
+int insectIntoLinkedListByIndex(struct node ** Start, int index ,int value){
     struct node *new = (struct node *)malloc(sizeof(struct node));
-    if (index == 1){
-        new->n = value;
+    new->n = value;
+    if (index == 0){
         new->next = *Start;
         *Start = new;
     }else{
         struct node * s =  *Start;
+        if (s == NULL){
+            new->next = NULL;
+            *Start = new;
+        }
         while (index-1){
             s = s->next;
             if (s == NULL){
@@ -40,22 +44,66 @@ int insectIntoLinkedList(struct node ** Start, int index ,int value){
             }
             index--;
         }
-        new->n = value;
         new->next = s->next;
         s->next = new;
     }
     return 0;
 }
 
-int main(){
-    struct node * linkedlistStart = createLinkedList(10);
+int insectIntoLinkedListByValue(struct node ** Start, int v ,int value){
+    struct node *new = (struct node *)malloc(sizeof(struct node));
+    new->n = value;
+    struct node *s = *Start;
+    if (s == NULL){
+        *Start = new;
+        new->next = NULL;
+        return 0;
+    }while (s != NULL){
+        if (s->n == v){
+            new->next = s->next;
+            s->next = new;
+            return 0;
+        }
+        s = s->next;
+    }
+    return 1;
+}
 
-    int result = insectIntoLinkedList(&linkedlistStart, 10 ,100);
+int insectIntoLinkedListByAddress(struct node ** Start, struct node * addr,int value){
+    struct node *new = (struct node *)malloc(sizeof(struct node));
+    new->n = value;
+    struct node *s = *Start;
+    if (s == NULL){
+        *Start = new;
+        new->next = NULL;
+        return 0;
+    }while (s != NULL){
+        if (s == addr){
+            new->next = s->next;
+            s->next = new;
+            return 0;
+        }
+        s = s->next;
+    }
+    return 1;
+}
+
+int main(){
+    struct node * linkedlistStart = createLinkedList(0);
+
+    
+    struct node * s = linkedlistStart;
+    printf("start -> ");
+    while (s){
+        printf("[%d] ",s->n);
+        s = s->next;
+    }
+    printf("-> end\n");
+    int result = insectIntoLinkedListByIndex(&linkedlistStart,1,45);
     if (result){
         printf("can't perform operation with these parameters.\n");
     }
-
-    struct node * s = linkedlistStart;
+    s= linkedlistStart;
     printf("start -> ");
     while (s){
         printf("[%d] ",s->n);

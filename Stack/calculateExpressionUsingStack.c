@@ -1,6 +1,7 @@
 #include<stdio.h>
 #include<stdlib.h>
 #include<string.h>
+#include<math.h>
 
 struct node{
     int info;
@@ -129,6 +130,14 @@ int importants(char ch){
     }
 }
 
+int power(int a,int b){
+    int res = 1;
+    for(int i = 0 ; i < b ; i++){
+        res = res * a;
+    }
+    return res;
+}
+
 char *InfixToPostfix(char *inputExp,char * result){
     int j=0;
     push('(');
@@ -185,8 +194,8 @@ int calculateUsingStack(char *postfixExp){
                 push(a/b);
                 break;
 
-            case '%':
-                push(a%b);
+            case '^':
+                push(power(a,b));
                 break;
             
             default:
