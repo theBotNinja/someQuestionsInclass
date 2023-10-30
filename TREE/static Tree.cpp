@@ -110,5 +110,6 @@ int main(){
     InOrder(root);
     cout << endl;
     PostOrder(root);
+    cout <<endl;
     return 0;
 }
