@@ -1,5 +1,6 @@
 #include<iostream>
 #include<stack>
+#include<queue>
 using namespace std;
 
 struct node {
@@ -27,7 +28,7 @@ void PreOrder(node *root){// Node Left Right
             }
         }
     }
-    
+    cout<<endl;
 }
 
 void R_PreOrder(node *root){// Node Left Right
@@ -37,6 +38,13 @@ void R_PreOrder(node *root){// Node Left Right
         R_PreOrder(root->lnode);
         root = root->rnode;
     }
+}
+
+void doubleR_PreOrder(node *root){
+    if (root==NULL) return;
+    cout << root->data<<" ";
+    doubleR_PreOrder(root->lnode);
+    doubleR_PreOrder(root->rnode);
 }
 
 void InOrder(node *root){
@@ -54,10 +62,27 @@ void InOrder(node *root){
         cout << root->data << " ";
         root = root->rnode;
     }
+    cout<<endl;
+}
+
+void doubleR_InOrder(node *root){
+    if (root==NULL) return;
+    doubleR_InOrder(root->lnode);
+    cout << root->data<<" ";
+    doubleR_InOrder(root->rnode);
+}
+
+
+void doubleR_PostOrder(node *root){
+    if (root==NULL) return;
+    doubleR_PostOrder(root->lnode);
+    doubleR_PostOrder(root->rnode);
+    cout << root->data<<" ";
 }
 
 void PostOrder(node *root){
     stack <node *> st;
+    struct node * prev;int count =0;
     while(true){
         while (root != NULL){
             st.push(root);
@@ -68,22 +93,51 @@ void PostOrder(node *root){
         }
         root = st.top();
         st.pop();
-        if (root->rnode != NULL)
-            cout << root->rnode->data << " ";
-        cout << root->data << " ";
-        root = root->rnode;
+        if (root->lnode == NULL && root->rnode == NULL){
+            cout << root->data << " ";
+            prev = root;
+        }
+        if (root->rnode == prev && root->rnode != NULL){
+            cout << root->data << " ";
+            prev = root;
+        }
+        if (root->lnode == prev && root->rnode != NULL){
+            st.push(root);
+            root = root->rnode;
+            continue;
+        }
+        cout << "<>" << prev->data<<"<>" << endl;
+        if (count++ > 10) break; 
+        root =  NULL;
     }
+    cout << endl;
+}
+
+void levelOrder(node * root){
+    queue<node *>Queue;
+    Queue.push(root);
+    while(!Queue.empty()){
+        node * temp = Queue.front();
+        Queue.pop();
+        cout << temp->data << " ";
+        if (temp->lnode != NULL)
+            Queue.push(temp->lnode);
+        if (temp->rnode != NULL)
+            Queue.push(temp->rnode);
+    }
+    cout << endl;
 }
 
 int main(){
     /*create this static binary tree
                     10
             12              13
-        14      15      45      65      
+        14      15      45      65 
+                    100     
     */
    // we need 7 nodes
     node *root;
-    node n1,n2,n3,n4,n5,n6,n7;
+    node n1,n2,n3,n4,n5,n6,n7,n8;
     root = &n1;
     n1.data = 10;
     n2.data = 12;
@@ -92,24 +146,36 @@ int main(){
     n5.data = 15;
     n6.data = 45;
     n7.data = 65;
+    n8.data = 100;
     n1.lnode = &n2;
     n1.rnode = &n3;
     n2.lnode = &n4;
     n2.rnode = &n5;
     n3.lnode = &n6;
     n3.rnode = &n7;
-    n4.lnode = n4.rnode = n5.lnode = n5.rnode = n6.lnode = n6.rnode = n7.lnode = n7.rnode = NULL;
+    n5.rnode = &n8;
+    n8.lnode = n8.rnode = n4.lnode = n4.rnode = n5.lnode = n6.lnode = n6.rnode = n7.lnode = n7.rnode = NULL;
     // tranversal can be done in 3 ways -
+    // Level order
     //pre-order     (NLR)
     //in-order      (LNR)
     //post-order    (LRN)
-    PreOrder(root);
+    cout << "LevelOrder" << endl;
+    levelOrder(root);
     cout << endl;
+    cout << "preorder" << endl;
+    PreOrder(root);
     R_PreOrder(root);
     cout << endl;
+    doubleR_PreOrder(root);
+    cout << endl;
+    cout << "\nInOrder" << endl;
     InOrder(root);
+    doubleR_InOrder(root);
+    cout << endl;
+    cout << "\nPostOrder" << endl;
+    doubleR_PostOrder(root);
     cout << endl;
     PostOrder(root);
-    cout <<endl;
     return 0;
 }
