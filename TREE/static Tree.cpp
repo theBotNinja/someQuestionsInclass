@@ -128,6 +128,36 @@ void levelOrder(node * root){
     cout << endl;
 }
 
+void leftRightFromTopBottom(node * root){
+    stack<node *>st1;
+    stack<node *>st2;
+    st1.push(root);
+    while (!(st1.empty() &&  st2.empty())){
+        
+        while (!st1.empty())
+        {
+            node * temp = st1.top();
+            st1.pop();  
+            if (temp->lnode != NULL)
+                st2.push(temp->lnode);
+            cout << temp->data << " ";
+            if (temp->rnode != NULL)
+                st2.push(temp->rnode);
+        }
+        while (!st2.empty())
+        {
+            node * temp = st2.top();
+            st2.pop();
+            cout << temp->data << " "; 
+            if (temp->rnode != NULL)
+                st1.push(temp->rnode);
+            if (temp->lnode != NULL)
+                st1.push(temp->lnode);
+        }
+    }
+    cout << endl;
+}
+
 int main(){
     /*create this static binary tree
                     10
@@ -177,5 +207,7 @@ int main(){
     doubleR_PostOrder(root);
     cout << endl;
     PostOrder(root);
+    cout << "print in left to right and top to bottom :"<<endl; 
+    leftRightFromTopBottom(root);
     return 0;
 }
