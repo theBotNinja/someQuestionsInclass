@@ -1,5 +1,6 @@
-#include<stdio.h>
-#include<stdlib.h>
+#include<iostream>
+#include<stack>
+using namespace std;
 
 //node struct for Tree
 struct node {
@@ -92,16 +93,57 @@ void doubleR_InOrder(struct node *root){
     doubleR_InOrder(root->rnode);
 }
 
+
+void DeleteNode(struct node *root,int val){
+    struct node *toBereplacedWith;
+    struct node *selectedNode;
+    stack <node *> st;
+    while(true){
+        while (root != NULL){
+            st.push(root);
+            root = root->lnode;
+        }
+        if (st.empty()){
+            break;
+        }
+        root = st.top();
+        st.pop();
+        //process
+        if (val == root->data){
+            selectedNode = root;
+            if (toBereplacedWith !=NULL){
+                break;
+            }
+        }
+        if (toBereplacedWith->data == val){
+            toBereplacedWith = root;
+            break;
+        }
+        toBereplacedWith = root;
+        root = root->rnode;
+        if (selectedNode != NULL && toBereplacedWith !=NULL){
+            break;
+        }
+    }
+    selectedNode->data = toBereplacedWith->data;
+    free(toBereplacedWith);
+    cout<<endl;
+}
+
+
 int main(){
     //creation of BST
     struct node *ROOT = createBST();
     doubleR_InOrder(ROOT);
     //Searching in BST
-    int searchForInterger;
+    /*int searchForInterger;
     printf("the int you want to search : ");
     scanf("%d",&searchForInterger);
     searchForInterger = searchInBST(ROOT,searchForInterger);
     if (searchForInterger)  printf("Element found !");
-    else   printf("Element not found !!");
+    else   printf("Element not found !!");*/
+    doubleR_InOrder(ROOT);
+    DeleteNode(ROOT,10);
+    doubleR_InOrder(ROOT);
     return 0;
 }

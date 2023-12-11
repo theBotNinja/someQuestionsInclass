@@ -45,6 +45,41 @@ node * getMaxNode(node * root){
     return maxval;
 }
 
+node * R_getMaxNode(node * root){
+    node *leftMaxNode,*rightMaxNode;
+    if (root->lnode==NULL && root->rnode!=NULL){
+        rightMaxNode = R_getMaxNode(root->rnode);
+        if (rightMaxNode->data < root->data){
+            return root;
+        }else{
+            return rightMaxNode;
+        }
+    }else if (root->rnode == NULL && root->lnode != NULL){
+        leftMaxNode = R_getMaxNode(root->lnode);
+        if (leftMaxNode->data < root->data){
+            return root;
+        }else{
+            return leftMaxNode;
+        }
+    }else if (root->rnode == NULL && root->lnode == NULL){
+        return root;
+    }else{
+        leftMaxNode = R_getMaxNode(root->lnode);
+        rightMaxNode = R_getMaxNode(root->rnode);
+        if (leftMaxNode->data > rightMaxNode->data){
+            if (leftMaxNode->data > root->data)
+                return leftMaxNode;
+            else
+                return root;
+        }else{
+            if (rightMaxNode->data > root->data)
+                return rightMaxNode;
+            else
+                return root;
+        }
+    }
+}
+
 int getNumberOfNode(node *root){
     queue<node *>Queue;
     int count = 0;
@@ -61,6 +96,15 @@ int getNumberOfNode(node *root){
             Queue.push(temp->rnode);
     }
     return count;
+}
+
+int R_getNumberOfNode(node *root){
+    int counter = 1;
+    if (root->lnode != NULL)
+        counter += R_getNumberOfNode(root->lnode);
+    if (root->rnode != NULL)
+        counter += R_getNumberOfNode(root->rnode);
+    return counter;
 }
 
 int childWithSingleNode(node *root){
@@ -80,6 +124,21 @@ int childWithSingleNode(node *root){
             Queue.push(temp->rnode);
     }
     return count;
+}
+
+int R_childWithSingleNode(node *root){
+    int counter = 0;
+    if (root->lnode==NULL && root->rnode!=NULL){
+        counter++;
+        counter += R_childWithSingleNode(root->rnode);
+    }else if (root->rnode == NULL && root->lnode != NULL){
+        counter++;
+        counter += R_childWithSingleNode(root->lnode);
+    }else if (root->rnode != NULL && root->lnode != NULL){
+        counter += R_childWithSingleNode(root->rnode);
+        counter += R_childWithSingleNode(root->lnode);
+    }
+    return counter;
 }
 
 int main(){
@@ -115,13 +174,13 @@ int main(){
     cout << "internal node" << endl;
     printValuesAtIntermalNodes(root);
     cout <<"get max node"<< endl;
-    node * maxNode = getMaxNode(root);
+    node * maxNode = R_getMaxNode(root);
     cout << maxNode->data << endl;
     cout << "count nodes" << endl;
-    int nodeCount = getNumberOfNode(root);
+    int nodeCount = R_getNumberOfNode(root);
     cout << nodeCount << endl;
     cout << "number of single child nodes" << endl;
-    int singlechildnode = childWithSingleNode(root);
+    int singlechildnode = R_childWithSingleNode(root);
     cout << singlechildnode << endl;
     return 0;
 }
